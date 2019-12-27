@@ -18,6 +18,9 @@ namespace ExtendingIdentityDemo.Controllers
             _logger = logger;
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public IActionResult Index()
         {
             return View();
