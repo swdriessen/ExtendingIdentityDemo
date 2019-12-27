@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ExtendingIdentityDemo.Extensions;
 using ExtendingIdentityDemo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace ExtendingIdentityDemo.Areas.Identity.Pages.Account.Manage
         }
 
         public string Username { get; set; }
+        public string Email { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -37,8 +39,6 @@ namespace ExtendingIdentityDemo.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-
-            [Display(Name = "Display Name")]
             public string DisplayName { get; set; }
         }
 
@@ -47,13 +47,14 @@ namespace ExtendingIdentityDemo.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            
             Username = userName;
+            Email = await _userManager.GetEmailAsync(user);
+            var displayName = user.DisplayName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                DisplayName = user.DisplayName
+                DisplayName = displayName
             };
         }
 
@@ -94,11 +95,14 @@ namespace ExtendingIdentityDemo.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if(Input.DisplayName != user.DisplayName)
+            user.DisplayName = Input.DisplayName;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
             {
-                user.DisplayName = Input.DisplayName;
-                await _userManager.UpdateAsync(user);
+                var userId = await _userManager.GetUserIdAsync(user);
+                throw new InvalidOperationException($"Unexpected error occurred setting display name for user with ID '{userId}'.");
             }
+
 
 
             await _signInManager.RefreshSignInAsync(user);
