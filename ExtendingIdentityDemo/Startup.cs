@@ -31,27 +31,39 @@ namespace ExtendingIdentityDemo
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options =>
+
+
+            //moved to scaffolding
+            //services.AddDefaultIdentity<ApplicationUser>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedAccount = true;
+
+            //    //if (env.IsDevelopment())
+            //    //{
+            //    //added for testing
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Password.RequiredLength = 6;
+            //    //}
+
+
+
+            //    //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
+
+            //    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+            //    options.User.RequireUniqueEmail = true;
+
+            //})
+            //.AddRoles<IdentityRole>()            
+            //.AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //
+            services.Configure<SecurityStampValidatorOptions>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                //when removing role, update stamp and logout user
+                options.ValidationInterval = TimeSpan.FromSeconds(0);
+            });
 
-                //if (env.IsDevelopment())
-                //{
-                    //added for testing
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredLength = 6;
-                //}
-
-
-
-                //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
-
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-                options.User.RequireUniqueEmail = true;
-
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -63,6 +75,7 @@ namespace ExtendingIdentityDemo
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                //app.UseBrowserLink();
             }
             else
             {
@@ -73,6 +86,7 @@ namespace ExtendingIdentityDemo
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            
             app.UseRouting();
 
             app.UseAuthentication();
