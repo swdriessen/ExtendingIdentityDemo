@@ -10,7 +10,7 @@ namespace ExtendingIdentityDemo.Areas.Dashboard.Controllers
 {
 
 
-    [Authorize(Permissions.Dashboards.View)]
+    [Authorize(PermissionNames.Dashboards.View)]
     [Authorize(Roles="Admin")]
     [Area("Dashboard")]
     public class HomeController : Controller

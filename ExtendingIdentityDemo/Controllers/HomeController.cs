@@ -39,19 +39,19 @@ namespace ExtendingIdentityDemo.Controllers
         }
 
 
-        [Authorize(Permissions.Pages.Privacy)]
+        [Authorize(PermissionNames.Pages.Privacy)]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [Authorize(Permissions.Feature.Feature1)]
+        [Authorize(PermissionNames.Feature.Feature1)]
         public IActionResult Feature1()
         {
             return View();
         }
 
-        [Authorize(Permissions.Feature.Feature2)]
+        [Authorize(PermissionNames.Feature.Feature2)]
         public IActionResult Feature2()
         {
             return View();
@@ -68,7 +68,7 @@ namespace ExtendingIdentityDemo.Controllers
 
             var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
 
-            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature1));
+            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, PermissionNames.Feature.Feature1));
 
             return RedirectToAction("Index");
         }
@@ -79,7 +79,7 @@ namespace ExtendingIdentityDemo.Controllers
             
             var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
 
-            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature2));
+            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, PermissionNames.Feature.Feature2));
 
             return RedirectToAction("Index");
         }
@@ -91,7 +91,7 @@ namespace ExtendingIdentityDemo.Controllers
 
             var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
 
-            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature1));
+            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, PermissionNames.Feature.Feature1));
 
             return RedirectToAction("Index");
         }
@@ -102,7 +102,7 @@ namespace ExtendingIdentityDemo.Controllers
 
             var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
 
-            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature2));
+            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, PermissionNames.Feature.Feature2));
 
             return RedirectToAction("Index");
         }
@@ -123,8 +123,8 @@ namespace ExtendingIdentityDemo.Controllers
             var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
             var adminRole = await roleManager.FindByNameAsync("Admin");
 
-            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.View));
-            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.Create));
+            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, PermissionNames.Dashboards.View));
+            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, PermissionNames.Dashboards.Create));
 
 
             //userManager.claim
@@ -157,7 +157,7 @@ namespace ExtendingIdentityDemo.Controllers
 
             var adminRole = await roleManager.FindByNameAsync("Admin");
             
-            var result = await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.View));
+            var result = await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, PermissionNames.Dashboards.View));
                        
 
             return RedirectToAction("Index");
