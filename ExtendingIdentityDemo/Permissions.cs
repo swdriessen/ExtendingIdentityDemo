@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExtendingIdentityDemo.Models;
+using ExtendingIdentityDemo.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExtendingIdentityDemo
 {
-    public static class Permissions
+    public static class PermissionNames
     {
         public static class Dashboards
         {
@@ -37,6 +38,11 @@ namespace ExtendingIdentityDemo
             public const string Feature1 = "Permissions.Feature.Feature1";
             public const string Feature2 = "Permissions.Feature.Feature2";
         }
+
+        public static IEnumerable<string> GetPermissions()
+        {
+            yield return Dashboards.View;
+        }
     }
 
     public class CustomClaimTypes
@@ -44,15 +50,7 @@ namespace ExtendingIdentityDemo
         public const string Permission = "permission";
     }
 
-    public class PermissionRequirement : IAuthorizationRequirement
-    {
-        public string Permission { get; private set; }
-
-        public PermissionRequirement(string permission)
-        {
-            Permission = permission;
-        }
-    }
+   
 
     public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
     {

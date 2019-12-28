@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
+using ExtendingIdentityDemo.Extensions;
 
 [assembly: HostingStartup(typeof(ExtendingIdentityDemo.Areas.Identity.IdentityHostingStartup))]
 namespace ExtendingIdentityDemo.Areas.Identity
@@ -20,19 +21,9 @@ namespace ExtendingIdentityDemo.Areas.Identity
 
                 services.AddDefaultIdentity<ApplicationUser>(options =>
                 {
+                    options.UseDevelopmentPasswordOptions();
+
                     options.SignIn.RequireConfirmedAccount = true;
-
-                    //if (env.IsDevelopment())
-                    //{
-                    //added for testing
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredLength = 6;
-                    //}
-
-
-
-                    //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
 
                     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
                     options.User.RequireUniqueEmail = true;

@@ -21,4 +21,10 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExtendingIdentityDemo.Extensions\ExtendingIdentityDemo.Extensions.csproj" />
+    <ProjectReference Include="..\ExtendingIdentityDemo.Permissions\ExtendingIdentityDemo.Permissions.csproj" />
+  </ItemGroup>
+
 </Project>

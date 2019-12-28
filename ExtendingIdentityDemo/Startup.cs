@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ExtendingIdentityDemo.Models;
 using Microsoft.AspNetCore.Authorization;
+using ExtendingIdentityDemo.Permissions;
 
 namespace ExtendingIdentityDemo
 {
@@ -33,8 +34,9 @@ namespace ExtendingIdentityDemo
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
 
             //moved to scaffolding
@@ -63,27 +65,15 @@ namespace ExtendingIdentityDemo
 
             //
 
-            services.AddAuthorization(options => {
-
-                options.AddPolicy(Permissions.Dashboards.View, builder => {
-                    builder.AddRequirements(new PermissionRequirement(Permissions.Dashboards.View));
-                });
-
-                options.AddPolicy(Permissions.Pages.Privacy, builder => {
-                    builder.AddRequirements(new PermissionRequirement(Permissions.Pages.Privacy));
-                });
-
-                options.AddPolicy(Permissions.Pages.Moderators, builder => {
-                    builder.AddRequirements(new PermissionRequirement(Permissions.Pages.Moderators));
-                });
-
-                options.AddPolicy(Permissions.Feature.Feature1, builder => {
-                    builder.AddRequirements(new PermissionRequirement(Permissions.Feature.Feature1));
-                });
-
-                options.AddPolicy(Permissions.Feature.Feature2, builder => {
-                    builder.AddRequirements(new PermissionRequirement(Permissions.Feature.Feature2));
-                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPermissionPolicies(
+                    PermissionNames.Dashboards.View,
+                    PermissionNames.Pages.Privacy,
+                    PermissionNames.Pages.Moderators,
+                    PermissionNames.Feature.Feature1,
+                    PermissionNames.Feature.Feature2
+                    );
             });
 
 
@@ -92,6 +82,9 @@ namespace ExtendingIdentityDemo
                 //when removing role, update stamp and logout user
                 options.ValidationInterval = TimeSpan.FromSeconds(0);
             });
+
+            //when using asp.net identity is it good practice to call UpdateSecurityStampAsync on the UserManager in combination with a ValidationInterval of 0 when removing Role/Claim to block access right away?
+            //
 
             services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
@@ -117,7 +110,7 @@ namespace ExtendingIdentityDemo
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
