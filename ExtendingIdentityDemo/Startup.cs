@@ -43,6 +43,13 @@ namespace ExtendingIdentityDemo
                     options.Password.RequiredLength = 6;
                 //}
 
+
+
+                //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
+
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+                options.User.RequireUniqueEmail = true;
+
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();

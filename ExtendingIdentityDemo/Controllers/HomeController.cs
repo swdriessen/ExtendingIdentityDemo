@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ExtendingIdentityDemo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExtendingIdentityDemo.Controllers
 {
@@ -26,6 +27,7 @@ namespace ExtendingIdentityDemo.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Moderator")]
         public IActionResult Privacy()
         {
             return View();
