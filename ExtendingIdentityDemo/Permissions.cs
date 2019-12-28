@@ -74,6 +74,10 @@ namespace ExtendingIdentityDemo
             // Get all the roles the user belongs to and check if any of the roles has the permission required
             // for the authorization to succeed.
             var user = await _userManager.GetUserAsync(context.User);
+
+            if (user == null)
+                return;
+
             var userRoleNames = await _userManager.GetRolesAsync(user);
             var userRoles = _roleManager.Roles.Where(x => userRoleNames.Contains(x.Name));
 

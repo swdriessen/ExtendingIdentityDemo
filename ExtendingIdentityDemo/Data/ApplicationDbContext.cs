@@ -14,15 +14,6 @@ namespace ExtendingIdentityDemo.Data
         {
 
         }
-    }
-
-
-    public class SecondaryDbContext : DbContext
-    {
-        public SecondaryDbContext(DbContextOptions<SecondaryDbContext> options)
-            : base(options)
-        {
-
-        }
+        public DbSet<ExtendingIdentityDemo.Models.UserProfile> UserProfile { get; set; }
     }
 }

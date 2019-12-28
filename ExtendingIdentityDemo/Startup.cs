@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using ExtendingIdentityDemo.Models;
 using Microsoft.AspNetCore.Authorization;
 using ExtendingIdentityDemo.Permissions;
+using ExtendingIdentityDemo.Extensions;
 
 namespace ExtendingIdentityDemo
 {
@@ -35,27 +36,36 @@ namespace ExtendingIdentityDemo
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            //moved to scaffolding
-            //services.AddDefaultIdentity<ApplicationUser>(options =>
-            //{
-            //    options.SignIn.RequireConfirmedAccount = true;
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                
+                    options.UseDevelopmentPasswordOptions();
 
-            //    //if (env.IsDevelopment())
-            //    //{
-            //    //added for testing
-            //    options.Password.RequireUppercase = false;
-            //    options.Password.RequireNonAlphanumeric = false;
-            //    options.Password.RequiredLength = 6;
-            //    //}
+                    options.SignIn.RequireConfirmedAccount = true;
 
-            //    //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+                    options.User.RequireUniqueEmail = true;
 
-            //    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-            //    options.User.RequireUniqueEmail = true;
+                
 
-            //})
-            //.AddRoles<IdentityRole>()
-            //.AddEntityFrameworkStores<ApplicationDbContext>();
+                //options.SignIn.RequireConfirmedAccount = true;
+
+                ////if (env.IsDevelopment())
+                ////{
+                ////added for testing
+                //options.Password.RequireUppercase = false;
+                //options.Password.RequireNonAlphanumeric = false;
+                //options.Password.RequiredLength = 6;
+                ////}
+
+                ////abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
+
+                //options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+                //options.User.RequireUniqueEmail = true;
+
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthorization(options =>
             {
