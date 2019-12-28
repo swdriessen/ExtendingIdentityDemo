@@ -30,14 +30,10 @@ namespace ExtendingIdentityDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
 
             //moved to scaffolding
             //services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -52,18 +48,14 @@ namespace ExtendingIdentityDemo
             //    options.Password.RequiredLength = 6;
             //    //}
 
-
-
             //    //abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
 
             //    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
             //    options.User.RequireUniqueEmail = true;
 
             //})
-            //.AddRoles<IdentityRole>()            
+            //.AddRoles<IdentityRole>()
             //.AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //
 
             services.AddAuthorization(options =>
             {
@@ -75,16 +67,12 @@ namespace ExtendingIdentityDemo
                     PermissionNames.Feature.Feature2
                     );
             });
-
-
+            
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 //when removing role, update stamp and logout user
                 options.ValidationInterval = TimeSpan.FromSeconds(0);
             });
-
-            //when using asp.net identity is it good practice to call UpdateSecurityStampAsync on the UserManager in combination with a ValidationInterval of 0 when removing Role/Claim to block access right away?
-            //
 
             services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
@@ -115,7 +103,6 @@ namespace ExtendingIdentityDemo
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

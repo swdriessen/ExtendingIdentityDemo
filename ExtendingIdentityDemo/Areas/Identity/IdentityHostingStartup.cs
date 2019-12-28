@@ -17,6 +17,16 @@ namespace ExtendingIdentityDemo.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
+            //builder.ConfigureServices(services => {
+
+            //    services.AddDbContext<ApplicationDbContext>(options =>
+            //    {
+            //        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //    });
+
+            //});
+
+
             builder.ConfigureServices((context, services) => {
 
                 services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -29,8 +39,8 @@ namespace ExtendingIdentityDemo.Areas.Identity
                     options.User.RequireUniqueEmail = true;
 
                 })
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             });
         }

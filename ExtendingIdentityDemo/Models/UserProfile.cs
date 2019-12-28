@@ -5,8 +5,13 @@ using System.Threading.Tasks;
 
 namespace ExtendingIdentityDemo.Models
 {
-    public class ApplicationUserProfile
+    public class UserProfile
     {
+        public UserProfile()
+        {
+
+        }
+
         public string Location { get; set; }
         public string Information { get; set; }
 
@@ -15,7 +20,7 @@ namespace ExtendingIdentityDemo.Models
 
 
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

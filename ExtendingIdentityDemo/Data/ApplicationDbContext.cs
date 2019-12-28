@@ -12,14 +12,17 @@ namespace ExtendingIdentityDemo.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            
+
         }
+    }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+
+    public class SecondaryDbContext : DbContext
+    {
+        public SecondaryDbContext(DbContextOptions<SecondaryDbContext> options)
+            : base(options)
         {
-            base.OnModelCreating(builder);
 
-            
         }
     }
 }
