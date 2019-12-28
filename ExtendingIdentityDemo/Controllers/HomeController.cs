@@ -9,6 +9,7 @@ using ExtendingIdentityDemo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace ExtendingIdentityDemo.Controllers
 {
@@ -37,10 +38,141 @@ namespace ExtendingIdentityDemo.Controllers
             return View();
         }
 
+
+        [Authorize(Permissions.Pages.Privacy)]
         public IActionResult Privacy()
         {
             return View();
         }
+
+        [Authorize(Permissions.Feature.Feature1)]
+        public IActionResult Feature1()
+        {
+            return View();
+        }
+
+        [Authorize(Permissions.Feature.Feature2)]
+        public IActionResult Feature2()
+        {
+            return View();
+        }
+
+
+
+
+
+        public async Task<IActionResult> AddFeature1()
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            //var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
+
+            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature1));
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> AddFeature2()
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            //var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            
+            var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
+
+            await userManager.AddClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature2));
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> RemoveFeature1()
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            //var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
+
+            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature1));
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> RemoveFeature2()
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            //var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
+
+            await userManager.RemoveClaimAsync(admin, new Claim(CustomClaimTypes.Permission, Permissions.Feature.Feature2));
+
+            return RedirectToAction("Index");
+        }
+        //public IActionResult AddPersmissionViewDashboard()
+        //{
+        //    var manager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //    var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+
+
+        //    return RedirectToAction("Index");
+        //}
+        public async Task<IActionResult> RemovePersmissionViewDashboardAsync()
+        {
+            var userManager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var admin = await userManager.FindByEmailAsync("bas_driessen@hotmail.com");
+            var adminRole = await roleManager.FindByNameAsync("Admin");
+
+            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.View));
+            await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.Create));
+
+
+            //userManager.claim
+
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> AddClaims()
+        {
+            var manager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var adminRole = await roleManager.FindByNameAsync("Admin");
+            
+            var result = await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, Permissions.Dashboards.View));
+                       
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<IActionResult> CreateRoles()
         {

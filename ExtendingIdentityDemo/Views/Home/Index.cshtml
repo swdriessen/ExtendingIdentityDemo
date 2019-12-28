@@ -6,25 +6,48 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    @if (SignInManager.IsSignedIn(User))
-    {
-        var user = await UserManager.GetUserAsync(User);
+        @if (SignInManager.IsSignedIn(User))
+        {
+            var user = await UserManager.GetUserAsync(User);
 
-        <p>Signed in as: @user.DisplayName</p>
-    }
+            <p>Signed in as: @user.DisplayName</p>
+        }
 
 
-<div>
-    <h4>Create Roles</h4>
-    <a asp-controller="Home" asp-action="CreateRoles">Create Roles Now</a>
-    <a asp-controller="Home" asp-action="AddModerator">Add Moderator Now</a>
-    <a asp-controller="Home" asp-action="RemoveModerator">Remove Moderator Now</a>
+        @if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            <h4>Claims:</h4>
 
-</div>
-    
+            <p>
+                @foreach (var claim in Context.User.Claims)
+                {
+                    <div><code>@claim.Type</code>: <strong>@claim.Value</strong></div>
+                }
+            </p>
 
-</div>
+            @*<a class="btn btn-lg btn-danger" href="/signout?returnUrl=%2F">Sign out</a>*@
+        }
+
+        <div>
+            <h4>Create Roles</h4>
+            <a asp-controller="Home" asp-action="CreateRoles">Create Roles Now</a>
+            <a asp-controller="Home" asp-action="AddModerator">Add Moderator Now</a>
+            <a asp-controller="Home" asp-action="RemoveModerator">Remove Moderator Now</a>
+
+        </div>
+
+
+        <div>
+            <h4>Permissions</h4>
+            <a asp-controller="Home" asp-action="AddFeature1">Add Feature 1</a>
+            <a asp-controller="Home" asp-action="AddFeature2">Add Feature 2</a>
+            <a asp-controller="Home" asp-action="RemoveFeature1">Remove Feature 1</a>
+            <a asp-controller="Home" asp-action="RemoveFeature2">Remove Feature 2</a>
+        </div>
+
+
+    </div>

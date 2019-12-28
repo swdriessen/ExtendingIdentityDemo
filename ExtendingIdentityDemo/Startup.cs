@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ExtendingIdentityDemo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExtendingIdentityDemo
 {
@@ -28,6 +29,9 @@ namespace ExtendingIdentityDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -58,11 +62,38 @@ namespace ExtendingIdentityDemo
             //.AddEntityFrameworkStores<ApplicationDbContext>();
 
             //
+
+            services.AddAuthorization(options => {
+
+                options.AddPolicy(Permissions.Dashboards.View, builder => {
+                    builder.AddRequirements(new PermissionRequirement(Permissions.Dashboards.View));
+                });
+
+                options.AddPolicy(Permissions.Pages.Privacy, builder => {
+                    builder.AddRequirements(new PermissionRequirement(Permissions.Pages.Privacy));
+                });
+
+                options.AddPolicy(Permissions.Pages.Moderators, builder => {
+                    builder.AddRequirements(new PermissionRequirement(Permissions.Pages.Moderators));
+                });
+
+                options.AddPolicy(Permissions.Feature.Feature1, builder => {
+                    builder.AddRequirements(new PermissionRequirement(Permissions.Feature.Feature1));
+                });
+
+                options.AddPolicy(Permissions.Feature.Feature2, builder => {
+                    builder.AddRequirements(new PermissionRequirement(Permissions.Feature.Feature2));
+                });
+            });
+
+
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 //when removing role, update stamp and logout user
                 options.ValidationInterval = TimeSpan.FromSeconds(0);
             });
+
+            services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -92,11 +123,12 @@ namespace ExtendingIdentityDemo
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("area_default", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }
